@@ -32,15 +32,27 @@
                 class="mt-8"
                 [formGroup]="signUpForm">
 
-                <!-- Name field -->
+                <!-- First name field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Full name</mat-label>
+                    <mat-label>First name</mat-label>
                     <input
-                        id="name"
+                        id="first"
                         matInput
-                        [formControlName]="'name'">
-                    <mat-error *ngIf="signUpForm.get('name').hasError('required')">
-                        Full name is required
+                        [formControlName]="'firstName'">
+                    <mat-error *ngIf="signUpForm.get('firstName').hasError('required')">
+                        First name is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Last name field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Last name</mat-label>
+                    <input
+                        id="last"
+                        matInput
+                        [formControlName]="'lastName'">
+                    <mat-error *ngIf="signUpForm.get('lastName').hasError('required')">
+                        Last name is required
                     </mat-error>
                 </mat-form-field>
 
@@ -85,15 +97,6 @@
                     <mat-error>
                         Password is required
                     </mat-error>
-                </mat-form-field>
-
-                <!-- Company field -->
-                <mat-form-field class="w-full">
-                    <mat-label>Company</mat-label>
-                    <input
-                        id="company-confirm"
-                        matInput
-                        [formControlName]="'company'">
                 </mat-form-field>
 
                 <!-- ToS and PP -->
@@ -158,11 +161,10 @@
         <div class="z-10 relative w-full max-w-2xl">
             <div class="text-7xl font-bold leading-none text-gray-100">
                 <div>Welcome to</div>
-                <div>our community</div>
+                <div>our beauty salon</div>
             </div>
             <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400">
-                Fuse helps developers to build organized and well coded dashboards full of beautiful and rich modules.
-                Join us and start building your application today.
+                We have more than 1k loyal customers.
             </div>
             <div class="flex items-center mt-8">
                 <div class="flex flex-0 items-center -space-x-1.5">
@@ -179,7 +181,7 @@
                         class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
                         src="assets/images/avatars/male-16.jpg">
                 </div>
-                <div class="ml-4 font-medium tracking-tight text-gray-400">More than 17k people joined us, it's your turn</div>
+                <div class="ml-4 font-medium tracking-tight text-gray-400">We have more than 1k loyal customers.</div>
             </div>
         </div>
     </div>
