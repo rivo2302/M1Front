@@ -63,7 +63,7 @@ export class AuthMockApi
         // @ Sign in - POST
         // -----------------------------------------------------------------------------------------------------
         this._fuseMockApiService
-            .onPost('api/auth/sign-in', 1500)
+            .onPost('apign-in', 1500)
             .reply(({request}) => {
 
                 // Sign in successful

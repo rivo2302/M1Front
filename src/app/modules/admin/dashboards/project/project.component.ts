@@ -4,6 +4,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApexOptions } from 'ng-apexcharts';
 import { ProjectService } from 'app/modules/admin/dashboards/project/project.service';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
 
 @Component({
     selector       : 'project',
@@ -22,12 +24,14 @@ export class ProjectComponent implements OnInit, OnDestroy
     data: any;
     selectedProject: string = 'ACME Corp. Backend App';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    user: User;
 
     /**
      * Constructor
      */
     constructor(
         private _projectService: ProjectService,
+        private _userService: UserService,
         private _router: Router
     )
     {
@@ -42,6 +46,15 @@ export class ProjectComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+
+        // Subscribe to the user service
+        this._userService.user$
+            .pipe((takeUntil(this._unsubscribeAll)))
+            .subscribe((user: User) => {
+                this.user = user;
+            });
+
+
         // Get the data
         this._projectService.data$
             .pipe(takeUntil(this._unsubscribeAll))

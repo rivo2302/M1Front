@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { User } from 'app/core/user/user.types';
+import { environment } from 'environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -10,11 +11,15 @@ import { User } from 'app/core/user/user.types';
 export class UserService
 {
     private _user: ReplaySubject<User> = new ReplaySubject<User>(1);
+    private _baseUrl: string = environment.apiUrl;
+
 
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
+    constructor(
+        private _httpClient: HttpClient,
+    )
     {
     }
 
@@ -31,6 +36,7 @@ export class UserService
     {
         // Store the value
         this._user.next(value);
+
     }
 
     get user$(): Observable<User>
@@ -47,7 +53,7 @@ export class UserService
      */
     get(): Observable<User>
     {
-        return this._httpClient.get<User>('api/common/user').pipe(
+        return this._httpClient.get<User>(`${this._baseUrl}/user/${localStorage.getItem("userId")}`).pipe(
             tap((user) => {
                 this._user.next(user);
             })
