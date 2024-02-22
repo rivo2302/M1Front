@@ -5,6 +5,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ApexOptions } from 'ng-apexcharts';
 import { FinanceService } from 'app/modules/admin/dashboards/finance/finance.service';
+import { User } from 'app/core/user/user.types';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector       : 'finance',
@@ -21,11 +23,15 @@ export class FinanceComponent implements OnInit, AfterViewInit, OnDestroy
     recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource();
     recentTransactionsTableColumns: string[] = ['transactionId', 'date', 'name', 'amount', 'status'];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+    user: User;
     /**
      * Constructor
      */
-    constructor(private _financeService: FinanceService)
+
+    constructor(
+        private _financeService: FinanceService,
+        private _userService: UserService
+    )
     {
     }
 
@@ -38,6 +44,14 @@ export class FinanceComponent implements OnInit, AfterViewInit, OnDestroy
      */
     ngOnInit(): void
     {
+
+        // Subscribe to the user service
+        this._userService.user$
+        .pipe((takeUntil(this._unsubscribeAll)))
+        .subscribe((user: User) => {
+            this.user = user;
+        });
+
         // Get the data
         this._financeService.data$
             .pipe(takeUntil(this._unsubscribeAll))
