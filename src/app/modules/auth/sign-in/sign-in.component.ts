@@ -62,9 +62,13 @@ export class AuthSignInComponent implements OnInit {
         this.signInForm.disable();
         this.showAlert = false;
 
-        this._authService.signIn(this.signInForm.value).subscribe(() => {
-            const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-            this._router.navigateByUrl(redirectURL);
+        this._authService.signIn(this.signInForm.value).subscribe((res: any) => {
+            // const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
+            const redirectURL = {
+                Client: "/dashboards/rendez-vous"
+            }
+            // this._router.navigateByUrl(redirectURL);
+            this._router.navigate([redirectURL[res.user.role]]);
         }, () => {
             this.signInForm.enable();
             this.signInNgForm.resetForm();
