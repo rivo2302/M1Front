@@ -5,7 +5,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     {
         id      : 'dashboards',
         title   : 'Blue diamond',
-        subtitle: 'Faîtes comme chez vous',
+        subtitle: 'La beauté avant tout !',
         type    : 'group',
         icon    : 'heroicons_outline:home',
         children: [
