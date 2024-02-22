@@ -1,8 +1,7 @@
-import { user } from './../../mock-api/common/user/data';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
 import { environment } from 'environments/environment';
@@ -41,24 +40,6 @@ export class AuthService {
     // -----------------------------------------------------------------------------------------------------
 
     /**
-     * Forgot password
-     *
-     * @param email
-     */
-    forgotPassword(email: string): Observable<any> {
-        return this._httpClient.post('api/auth/forgot-password', email);
-    }
-
-    /**
-     * Reset password
-     *
-     * @param password
-     */
-    resetPassword(password: string): Observable<any> {
-        return this._httpClient.post('api/auth/reset-password', password);
-    }
-
-    /**
      * Sign in
      *
      * @param credentials
@@ -95,30 +76,8 @@ export class AuthService {
      * Sign in using the access token
      */
     signInUsingToken(): Observable<any> {
-        // Renew token
-        return this._httpClient.post('api/auth/refresh-access-token', {
-            accessToken: this.accessToken
-        }).pipe(
-            catchError(() =>
-                // Return false
-                of(false)
-            ),
-            switchMap((response: any) => {
-
-                // Store the access token in the local storage
-                // this.accessToken = response.accessToken;
-                this.accessToken = this.accessToken;
-
-                // Set the authenticated flag to true
-                this._authenticated = true;
-
-                // Store the user on the user service
-                this._userService.user = response.user;
-
-                // Return true
-                return of(true);
-            })
-        );
+        this.accessToken = this.accessToken;
+        return of(true);
     }
 
     /**
