@@ -104,15 +104,6 @@ export class AuthService {
     }
 
     /**
-     * Unlock session
-     *
-     * @param credentials
-     */
-    unlockSession(credentials: { email: string; password: string }): Observable<any> {
-        return this._httpClient.post('api/auth/unlock-session', credentials);
-    }
-
-    /**
      * Check the authentication status
      */
     check(): Observable<boolean> {
