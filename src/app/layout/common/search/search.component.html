@@ -28,7 +28,7 @@
             <mat-option
                 class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
                 *ngIf="resultSets && !resultSets.length">
-                No results found!
+                No result found!
             </mat-option>
             <ng-container *ngFor="let resultSet of resultSets; trackBy: trackByFn">
                 <mat-optgroup class="flex items-center mt-2 px-2">
