@@ -1,0 +1,28 @@
+# Fichiers et dossiers de node
+node_modules
+npm-debug.log
+
+# Dossiers de build et de cache
+dist
+.tmp
+.cache
+
+# Fichiers de configuration et d'environnement
+.dockerignore
+Dockerfile
+.git
+.gitignore
+README.md
+LICENSE
+*.md
+
+# Fichiers spécifiques à l'éditeur
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# Autres fichiers et dossiers inutiles pour la construction ou l'exécution de l'application
+*.spec.ts
+*.test.ts
+*.sass-cache

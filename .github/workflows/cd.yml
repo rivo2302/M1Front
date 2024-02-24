@@ -1,0 +1,28 @@
+name: Odoo Middleware CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: SSH into the deployment server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /opt/test/M1Front
+            sudo git pull
+            sudo docker build -t front .
+            sudo docker rm -f m1front
+            docker run -d -p 8010:80 --name m1front front:latest
