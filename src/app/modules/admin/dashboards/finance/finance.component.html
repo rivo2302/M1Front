@@ -39,12 +39,20 @@
                <button
                    class="hidden sm:inline-flex ml-3"
                    mat-flat-button
-                   [color]="'primary'">
+                   [color]="'primary'"
+                   *ngIf="showDefault"
+                   (click)="showDefault = false"
+                >
                    <mat-icon
                        class="icon-size-5"
-                       [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                       [svgIcon]="'heroicons_solid:plus'">
+                    </mat-icon>
                    <span class="ml-2">Créer un rendez-vous</span>
                </button>
+
+                <button class="hidden sm:inline-flex ml-3" mat-flat-button (click)="cancel()" *ngIf="!showDefault">
+                    Voir l'historique
+                </button>
 
                <!-- Actions menu (visible on xs) -->
                <div class="sm:hidden">
@@ -54,143 +62,216 @@
                        <mat-icon [svgIcon]="'heroicons_outline:dots-vertical'"></mat-icon>
                    </button>
                    <mat-menu #actionsMenu="matMenu">
-                       <button mat-menu-item>Créer un rendez-vous</button>
+                       <button mat-menu-item *ngIf="showDefault" (click)="showDefault = false">Créer un rendez-vous</button>
+                       <button mat-menu-item *ngIf="!showDefault" (click)="cancel()">Voir l'historique</button>
                    </mat-menu>
                </div>
            </div>
        </div>
 
-       <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full mt-8">
-           <!-- Recent transactions table -->
+       <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full mt-8" *ngIf="showDefault">
+           <!-- Rendez-vous table -->
            <div class="xl:col-span-4 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                <div class="p-6">
                    <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Historique des rendez-vous</div>
-                   <div class="text-secondary font-medium">1 en attente, 4 effectués</div>
+                   <div class="text-secondary font-medium">{{getStatusCountsString()}}</div>
                </div>
                <div class="overflow-x-auto mx-6">
+                    <div class="flex flex-col items-center justify-center mb-10" *ngIf="loadingData">
+                        <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'">
+                        </mat-progress-spinner>
+                    </div>
+                    <div class="flex flex-col items-center justify-center mb-10" *ngIf="!loadingData && rendezVousList.length === 0">
+                        <mat-icon [svgIcon]="'heroicons_outline:information-circle'"></mat-icon>
+                        <h2 class="text-secondary text-3xl"><strong>Pas d'historiques de rendez-vous</strong></h2>
+                    </div>
                    <table
+                       *ngIf="!loadingData && rendezVousList.length !== 0"
                        class="w-full bg-transparent"
                        mat-table
                        matSort
-                       [dataSource]="recentTransactionsDataSource"
+                       [dataSource]="rendezVousDataSource"
                        [trackBy]="trackByFn"
-                       #recentTransactionsTable>
+                       #rendezVousTable>
 
                        <!-- Transaction ID -->
-                       <ng-container matColumnDef="transactionId">
+                       <ng-container matColumnDef="date_debut">
                            <th
                                mat-header-cell
                                mat-sort-header
                                *matHeaderCellDef>
-                               Transaction ID
+                               Date de debut
                            </th>
                            <td
                                mat-cell
-                               *matCellDef="let transaction">
-                               <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                                   {{transaction.transactionId}}
+                               *matCellDef="let rendez">
+                               <span class="pr-6 text-secondary whitespace-nowrap">
+                                   {{rendez?.startDate | date: "dd MMM y"}}
                                </span>
                            </td>
                        </ng-container>
 
                        <!-- Date -->
-                       <ng-container matColumnDef="date">
+                       <ng-container matColumnDef="date_fin">
                            <th
                                mat-header-cell
                                mat-sort-header
                                *matHeaderCellDef>
-                               Date
+                               Date de fin
                            </th>
                            <td
                                mat-cell
-                               *matCellDef="let transaction">
-                               <span class="pr-6 whitespace-nowrap">
-                                   {{transaction.date | date:'MMM dd, y'}}
+                               *matCellDef="let rendez">
+                               <span class="pr-6 text-secondary whitespace-nowrap">
+                                    {{rendez?.endDate | date: "dd MMM y"}}
                                </span>
                            </td>
                        </ng-container>
 
                        <!-- Name -->
-                       <ng-container matColumnDef="name">
+                       <ng-container matColumnDef="employe">
                            <th
                                mat-header-cell
                                mat-sort-header
                                *matHeaderCellDef>
-                               Name
+                               Employé
                            </th>
                            <td
                                mat-cell
-                               *matCellDef="let transaction">
-                               <span class="pr-6 whitespace-nowrap">
-                                   {{transaction.name}}
-                               </span>
-                           </td>
-                       </ng-container>
-
-                       <!-- Amount -->
-                       <ng-container matColumnDef="amount">
-                           <th
-                               mat-header-cell
-                               mat-sort-header
-                               *matHeaderCellDef>
-                               Amount
-                           </th>
-                           <td
-                               mat-cell
-                               *matCellDef="let transaction">
-                               <span class="pr-6 font-medium whitespace-nowrap">
-                                   {{transaction.amount | currency:'USD'}}
+                               *matCellDef="let rendez">
+                               <span class="pr-6 text-secondary whitespace-nowrap">
+                                   {{rendez?.employee?.firstName}}
                                </span>
                            </td>
                        </ng-container>
 
                        <!-- Status -->
-                       <ng-container matColumnDef="status">
+                       <ng-container matColumnDef="statut">
                            <th
                                mat-header-cell
                                mat-sort-header
                                *matHeaderCellDef>
-                               Status
+                               Statut
                            </th>
                            <td
                                mat-cell
-                               *matCellDef="let transaction">
+                               *matCellDef="let rendez">
                                <span
                                    class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
-                                   [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': transaction.status === 'pending',
-                                               'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': transaction.status === 'completed'}">
-                                   <span class="leading-relaxed whitespace-nowrap">{{transaction.status}}</span>
+                                   [ngClass]="{
+                                    'bg-yellow-200 text-yellow-800 dark:bg-red-600 dark:text-yellow-50': rendez.status === 'InProgress',
+                                    'bg-blue-200 text-blue-800 dark:bg-red-600 dark:text-blue-50': rendez.status === 'Ready',
+                                    'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': rendez.status === 'Finished'
+                                    }">
+                                   <span class="leading-relaxed whitespace-nowrap">{{rendez.status}}</span>
                                </span>
                            </td>
                        </ng-container>
 
                        <!-- Footer -->
-                       <ng-container matColumnDef="recentOrdersTableFooter">
-                           <td
-                               class="py-6 px-0 border-0"
-                               mat-footer-cell
-                               *matFooterCellDef
-                               colspan="6">
-                           </td>
-                       </ng-container>
-
-                       <tr
-                           mat-header-row
-                           *matHeaderRowDef="recentTransactionsTableColumns"></tr>
-                       <tr
-                           class="order-row h-16"
-                           mat-row
-                           *matRowDef="let row; columns: recentTransactionsTableColumns;"></tr>
-                       <tr
-                           class="h-16 border-0"
-                           mat-footer-row
-                           *matFooterRowDef="['recentOrdersTableFooter']"></tr>
+                       <!-- <ng-container matColumnDef="rendezVousTableFooter">
+                           <td class="py-6 px-0 border-0" mat-footer-cell  *matFooterCellDef colspan="6"></td>
+                       </ng-container> -->
+                       <tr mat-header-row *matHeaderRowDef="rendezVousTableColumns"></tr>
+                       <tr class="order-row h-16" mat-row *matRowDef="let row; columns: rendezVousTableColumns;"></tr>
+                       <!-- <tr class="h-16 border-0" mat-footer-row *matFooterRowDef="['rendezVousTableFooter']"></tr> -->
                    </table>
                </div>
            </div>
-
        </div>
 
-   </div>
+       <form class="xl:col-span-4 flex flex-col flex-auto bg-card shadow rounded-2xl mt-8 overflow-hidden"
+            [formGroup]="rendezForm"
+            *ngIf="!showDefault"
+        >
+            <!-- Alert -->
+            <div class="flex flex-col p-8">
+                <fuse-alert
+                    class="mb-4"
+                    *ngIf="showAlert"
+                    [appearance]="'outline'"
+                    [showIcon]="false"
+                    [type]="alert.type"
+                    [@shake]="alert.type === 'error'">
+                    {{alert.message}}
+                </fuse-alert>
+            </div>
 
+            <div class="bg-gray-50 dark:bg-gray-700 p-8 border-b">
+                <p class="text-lg font-medium">Date du rendez-vous</p>
+                <p class="text-secondary">Veuillez choisir les dates qui vous conviennent</p>
+            </div>
+            <div class="flex flex-col p-8">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Date de debut</mat-label>
+                    <input matInput [matDatepicker]="picker1" [formControlName]="'startDate'"
+                        [min]="todayDate()" [max]="rendezForm.get('endDate').value"
+                    >
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <mat-error *ngIf="rendezForm.get('startDate').hasError('required')">
+                        Start date is required
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                    <mat-label>Date de fin</mat-label>
+                    <input matInput [matDatepicker]="picker2" [formControlName]="'endDate'"
+                        [min]="rendezForm.get('startDate').value"
+                    >
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                    <mat-error *ngIf="rendezForm.get('endDate').hasError('required')">
+                        End date is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-700 p-8 border-t border-b">
+                <p class="text-lg font-medium">Votre employé préféré</p>
+                <p class="text-secondary">Qui voulez-vous prendre soin de vous ?</p>
+            </div>
+            <div class="flex flex-col p-8">
+                <mat-form-field>
+                    <mat-label>Employé</mat-label>
+                    <mat-select [formControlName]="'employee'">
+                        <mat-option [value]="emp._id" *ngFor="let emp of employes">{{emp.firstName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-700 p-8 border-t border-b">
+                <p class="text-lg font-medium">Services</p>
+                <p class="text-secondary">Que voulez vous faire ?</p>
+            </div>
+            <div class="flex flex-col p-8">
+                <mat-form-field>
+                    <mat-label>Services</mat-label>
+                    <mat-select [formControlName]="'requestedServices'" multiple>
+                        <mat-option [value]="service._id" *ngFor="let service of services">{{service.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="flex items-center justify-end border-t px-8 py-5 bg-gray-50 dark:bg-gray-700">
+                <button mat-button (click)="cancel()">
+                    Annuler
+                </button>
+                <button
+                    class="px-6 ml-3"
+                    mat-flat-button
+                    [color]="'primary'"
+                    [disabled]="rendezForm.disabled"
+                    (click)="createRendezVous()">
+                    <span *ngIf="!rendezForm.disabled">
+                        Sauvegarder
+                    </span>
+                    <mat-progress-spinner
+                        *ngIf="rendezForm.disabled"
+                        [diameter]="24"
+                        [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                </button>
+            </div>
+        </form>
+   </div>
 </div>
