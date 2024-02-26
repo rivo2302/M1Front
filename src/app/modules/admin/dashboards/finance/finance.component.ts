@@ -61,7 +61,7 @@ export class FinanceComponent implements OnInit, OnDestroy {
             employee: ['', Validators.required],
             requestedServices: [[]],
             client: [localStorage.getItem("userId")],
-            status: ['InProgress']
+            status: ['Ready']
         });
 
         // Subscribe to the user service

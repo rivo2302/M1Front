@@ -142,7 +142,6 @@ export class CryptoComponent implements OnInit, OnDestroy {
     };
 
     tasks() {
-        console.log(this.rendezVousList.filter(task => task.status === 'InProgress').length);
         return this.rendezVousList.filter(task => task.status === 'InProgress').length;
     }
 

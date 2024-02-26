@@ -4,20 +4,20 @@ import * as moment from 'moment';
 export const calendars = [
     {
         id     : '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
-        title  : 'Personal',
-        color  : 'bg-teal-500',
+        title  : 'Ready',
+        color  : 'bg-yellow-500',
         visible: true
     },
     {
         id     : '5dab5f7b-757a-4467-ace1-305fe07b11fe',
-        title  : 'Work',
-        color  : 'bg-indigo-500',
+        title  : 'In progress',
+        color  : 'bg-blue-500',
         visible: true
     },
     {
         id     : '09887870-f85a-40eb-8171-1b13d7a7f529',
-        title  : 'Appointments',
-        color  : 'bg-pink-500',
+        title  : 'Finished',
+        color  : 'bg-green-500',
         visible: true
     }
 ];
@@ -61,11 +61,11 @@ export const events = [
         calendarId : '1a470c8e-40ed-4c2d-b590-a4f1f6ead6cc',
         title      : 'Mom\'s Birthday',
         description: '',
-        start      : moment().date(8).startOf('day').toISOString(), // 8th of the current month at start of the day
-        end        : moment().year(9999).endOf('year').toISOString(), // End of the times
-        duration   : 0,
+        start      : moment("2024-02-28", "YYYY-MM-DD").toISOString(), // 8th of the current month at start of the day
+        end        : moment("2024-03-01", "YYYY-MM-DD").toISOString(), // End of the times
+        duration   : null,
         allDay     : true,
-        recurrence : 'FREQ=YEARLY;INTERVAL=1'
+        recurrence : null
     },
     // Appointments
     {

@@ -158,20 +158,18 @@
                                     <div class="flex -mt-2 -mr-2 ml-10">
 
                                         <!-- Non-recurring event -->
-                                        <ng-container *ngIf="!event.recurrence">
-                                            <!-- Edit -->
+                                        <!-- <ng-container *ngIf="!event.recurrence">
                                             <button
                                                 mat-icon-button
                                                 (click)="changeEventPanelMode('edit', 'single')">
                                                 <mat-icon [svgIcon]="'heroicons_outline:pencil-alt'"></mat-icon>
                                             </button>
-                                            <!-- Delete -->
                                             <button
                                                 mat-icon-button
                                                 (click)="deleteEvent(event)">
                                                 <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
                                             </button>
-                                        </ng-container>
+                                        </ng-container> -->
 
                                         <!-- Recurring event -->
                                         <ng-container *ngIf="event.recurrence">
