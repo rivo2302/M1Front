@@ -31,26 +31,23 @@
         </span>
     </button>
     <mat-divider class="my-2"></mat-divider>
-    <button mat-menu-item>
+    <button mat-menu-item
+        (click)="goToProfile()">
         <mat-icon [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
         <span>Profile</span>
-    </button>
-    <button mat-menu-item>
-        <mat-icon [svgIcon]="'heroicons_outline:cog'"></mat-icon>
-        <span>Settings</span>
     </button>
     <button
         mat-menu-item
         [matMenuTriggerFor]="userStatus">
         <mat-icon [svgIcon]="'heroicons_outline:dots-circle-horizontal'"></mat-icon>
-        <span>Status</span>
+        <span>Statut</span>
     </button>
     <mat-divider class="my-2"></mat-divider>
     <button
         mat-menu-item
         (click)="signOut()">
         <mat-icon [svgIcon]="'heroicons_outline:logout'"></mat-icon>
-        <span>Sign out</span>
+        <span>Se déconnecter</span>
     </button>
 </mat-menu>
 
@@ -61,19 +58,19 @@
         mat-menu-item
         (click)="updateUserStatus('online')">
         <span class="w-4 h-4 mr-3 rounded-full bg-green-500"></span>
-        <span>Online</span>
+        <span>En ligne</span>
     </button>
     <button
         mat-menu-item
         (click)="updateUserStatus('away')">
         <span class="w-4 h-4 mr-3 rounded-full bg-amber-500"></span>
-        <span>Away</span>
+        <span>Pas disponible</span>
     </button>
     <button
         mat-menu-item
         (click)="updateUserStatus('busy')">
         <span class="w-4 h-4 mr-3 rounded-full bg-red-500"></span>
-        <span>Busy</span>
+        <span>Occupé</span>
     </button>
     <button
         mat-menu-item

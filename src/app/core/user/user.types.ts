@@ -4,7 +4,7 @@ export interface User
     email: string;
     avatar?: string;
     favoriteEmployees?: any[],
-    workSchedule?: [],
+    workSchedule?: string,
     lastName: string,
     firstName: string,
     role: string,

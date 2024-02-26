@@ -31,11 +31,18 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 link : '/dashboards/rendez-vous'
             },
             {
-                id   : 'dashboards.crypto',
-                title: 'Crypto',
+                id   : 'dashboards.profile',
+                title: 'Profile',
                 type : 'basic',
-                icon : 'heroicons_outline:currency-dollar',
-                link : '/dashboards/crypto'
+                icon : 'heroicons_outline:user-circle',
+                link : '/pages/profile'
+            },
+            {
+                id   : 'dashboards.crypto',
+                title: 'Calendrier',
+                type : 'basic',
+                icon : 'heroicons_outline:calendar',
+                link : '/dashboards/gestion-employe'
             }
         ]
     },

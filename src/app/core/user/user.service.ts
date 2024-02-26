@@ -73,4 +73,9 @@ export class UserService
             })
         );
     }
+
+    updateProfile(data: any): Observable<any> {
+        console.log(data);
+        return this._httpClient.put(`${this._baseUrl}/user/${localStorage.getItem("userId")}`, data);
+    }
 }

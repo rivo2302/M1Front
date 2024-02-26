@@ -19,68 +19,11 @@
                             <mat-icon
                                 class="icon-size-5"
                                 [svgIcon]="'heroicons_solid:bell'"></mat-icon>
-                            <div class="ml-1.5 leading-6 truncate text-secondary">You have 3 notifications and 15 tasks</div>
+                            <div class="ml-1.5 leading-6 truncate text-secondary">You have 15 tasks</div>
                         </div>
                     </div>
                 </div>
-                <!-- Actions
-                <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
-                    <button
-                        class="fuse-mat-button-rounded bg-accent-700"
-                        mat-flat-button
-                        [color]="'accent'">
-                        <mat-icon
-                            class="icon-size-5"
-                            [svgIcon]="'heroicons_solid:mail'"></mat-icon>
-                        <span class="ml-2">Messages</span>
-                    </button>
-                    <button
-                        class="fuse-mat-button-rounded"
-                        mat-flat-button
-                        [color]="'primary'">
-                        <mat-icon
-                            class="icon-size-5"
-                            [svgIcon]="'heroicons_solid:cog'"></mat-icon>
-                        <span class="ml-2">Settings</span>
-                    </button>
-                </div> -->
             </div>
-            <!-- Project selector -->
-            <!-- <div
-                class="relative flex self-start pt-2 pb-1 pl-5 pr-4 cursor-pointer overflow-hidden rounded-t-xl border border-b-0 bg-default"
-                matRipple
-                [matMenuTriggerFor]="projectsMenu">
-                <div class="flex items-center">
-                    <div class="overflow-hidden">
-                        <div class="font-medium leading-6 truncate">{{selectedProject}}</div>
-                    </div>
-                    <div class="flex items-center justify-center pl-2">
-                        <mat-icon
-                            class="icon-size-5"
-                            [svgIcon]="'heroicons_solid:chevron-down'"></mat-icon>
-                    </div>
-                </div>
-                <mat-menu
-                    #projectsMenu="matMenu"
-                    [xPosition]="'before'">
-                    <button
-                        mat-menu-item
-                        (click)="selectedProject='ACME Corp. Backend App'">ACME Corp. Backend App
-                    </button>
-                    <button
-                        mat-menu-item
-                        (click)="selectedProject='ACME Corp. Frontend App'">ACME Corp. Frontend App
-                    </button>
-                    <button
-                        mat-menu-item
-                        (click)="selectedProject='Creapond'">Creapond
-                    </button>
-                    <button
-                        mat-menu-item
-                        (click)="selectedProject='Withinpixels'">Withinpixels
-                    </button>
-                </mat-menu>
-            </div> -->
         </div>
     </div>
 
@@ -240,7 +183,8 @@
                                                 [stroke]="chartGithubIssues.stroke"
                                                 [tooltip]="chartGithubIssues.tooltip"
                                                 [xaxis]="chartGithubIssues.xaxis"
-                                                [yaxis]="chartGithubIssues.yaxis"></apx-chart>
+                                                [yaxis]="chartGithubIssues.yaxis"
+                                            ></apx-chart>
                                         </div>
                                     </div>
                                     <!-- Overview -->
