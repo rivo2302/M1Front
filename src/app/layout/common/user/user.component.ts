@@ -98,6 +98,6 @@ export class UserComponent implements OnInit, OnDestroy
     }
 
     goToProfile() {
-        this._router.navigate(['/pages/profile']);
+        this._router.navigate(['/employee/profil']);
     }
 }

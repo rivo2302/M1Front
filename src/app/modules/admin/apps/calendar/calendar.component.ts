@@ -318,7 +318,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
                 title      : `${d.client.firstName} ${d.client.lastName}`,
                 description: this.getRequestedServices(d.requestedServices),
                 start      : moment(d.startDate, "YYYY-MM-DD").toISOString(),
-                end        : moment(d.endDate, "YYYY-MM-DD").toISOString(),
+                end        : moment(d.endDate, "YYYY-MM-DD").add(1, 'days').toISOString(),
                 duration   : null,
                 allDay     : true,
                 recurrence : null

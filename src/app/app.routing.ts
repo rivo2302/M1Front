@@ -80,6 +80,17 @@ export const appRoutes: Route[] = [
                 {path: 'gestion-employe', loadChildren: () => import('app/modules/admin/dashboards/crypto/crypto.module').then(m => m.CryptoModule)},
             ]},
 
+            // Client
+            {path: 'client', children: [
+                {path: 'rendez-vous', loadChildren: () => import('app/modules/admin/dashboards/finance/finance.module').then(m => m.FinanceModule)}
+            ]},
+
+            // Employee
+            {path: 'employee', children: [
+                {path: 'profil', loadChildren: () => import('app/modules/admin/pages/profile/profile.module').then(m => m.ProfileModule)},
+                {path: 'calendrier', loadChildren: () => import('app/modules/admin/apps/calendar/calendar.module').then(m => m.CalendarModule)},
+            ]},
+
             // Apps
             {path: 'apps', children: [
                 {path: 'academy', loadChildren: () => import('app/modules/admin/apps/academy/academy.module').then(m => m.AcademyModule)},

@@ -21,7 +21,6 @@ import { MatDateFormats, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FuseAlertModule } from '@fuse/components/alert';
 
-
 const CUSTOM_DATE_FORMATS: MatDateFormats = {
     parse: {
         dateInput: 'DD/MM/YYYY',

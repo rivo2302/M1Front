@@ -8,6 +8,7 @@ import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FuseAlertType } from '@fuse/components/alert';
+import moment from 'moment';
 
 @Component({
     selector: 'finance',
@@ -129,6 +130,12 @@ export class FinanceComponent implements OnInit, OnDestroy {
 
         this.rendezForm.disable();
         this.showAlert = false;
+
+        this.rendezForm.patchValue({
+            startDate:  moment(this.rendezForm.get("startDate").value).format("YYYY/MM/DD"),
+            endDate: moment(this.rendezForm.get("endDate").value).format("YYYY/MM/DD"),
+        });
+
         this._financeService.createRendezVous(this.rendezForm.value).subscribe(() => {
             window.scroll(0, 0);
             this.alert = {
@@ -174,4 +181,13 @@ export class FinanceComponent implements OnInit, OnDestroy {
         return this.rendezVousList.length != 0 ? statusStrings.join(', ') : "Auncun rendez-vous";
     }
 
+    convertDate(date: string) {
+        const dateObject = new Date(date);
+        const options = { day: 'numeric', month: 'long', year: 'numeric' } as any;
+        const formattedDate = new Intl.DateTimeFormat('fr-FR', options)
+          .formatToParts(dateObject)
+          .map(part => (part.type === 'month' ? part.value.charAt(0).toUpperCase() + part.value.slice(1) : part.value))
+          .join('');
+        return formattedDate;
+    }
 }

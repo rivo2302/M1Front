@@ -63,9 +63,9 @@ export class AuthSignInComponent implements OnInit {
 
         this._authService.signIn(this.signInForm.value).subscribe((res: any) => {
             const redirectURL = {
-                Client: "/dashboards/rendez-vous",
-                Employee: "/dashboards/gestion-employe",
-                Manager: "/dashboards/gestion-manager"
+                Client: "/client/rendez-vous",
+                Employee: "/employee/calendrier",
+                Manager: "/manager/to-be-found"
             }
             this._router.navigate([redirectURL[res.user.role]]);
         }, () => {

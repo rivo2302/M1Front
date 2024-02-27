@@ -28,21 +28,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 title: 'Rendez-vous',
                 type : 'basic',
                 icon : 'heroicons_outline:clock',
-                link : '/dashboards/rendez-vous'
-            },
-            {
-                id   : 'dashboards.profile',
-                title: 'Profile',
-                type : 'basic',
-                icon : 'heroicons_outline:user-circle',
-                link : '/pages/profile'
+                link : '/client/rendez-vous'
             },
             {
                 id   : 'dashboards.crypto',
                 title: 'Calendrier',
                 type : 'basic',
                 icon : 'heroicons_outline:calendar',
-                link : '/dashboards/gestion-employe'
+                link : '/employee/calendrier'
+            },
+            {
+                id   : 'dashboards.profile',
+                title: 'Mon compte',
+                type : 'basic',
+                icon : 'heroicons_outline:user-circle',
+                link : '/employee/profil'
             }
         ]
     },
