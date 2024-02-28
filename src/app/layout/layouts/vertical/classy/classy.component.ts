@@ -10,12 +10,11 @@ import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 
 @Component({
-    selector     : 'classy-layout',
-    templateUrl  : './classy.component.html',
+    selector: 'classy-layout',
+    templateUrl: './classy.component.html',
     encapsulation: ViewEncapsulation.None
 })
-export class ClassyLayoutComponent implements OnInit, OnDestroy
-{
+export class ClassyLayoutComponent implements OnInit, OnDestroy {
     isScreenSmall: boolean;
     navigation: Navigation;
     user: User;
@@ -31,8 +30,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _userService: UserService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService
-    )
-    {
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -42,8 +40,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     /**
      * Getter for current year
      */
-    get currentYear(): number
-    {
+    get currentYear(): number {
         return new Date().getFullYear();
     }
 
@@ -54,15 +51,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     /**
      * On init
      */
-    ngOnInit(): void
-    {
-        // Subscribe to navigation data
-        this._navigationService.navigation$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((navigation: Navigation) => {
-                this.navigation = navigation;
-            });
-
+    ngOnInit(): void {
         // Subscribe to the user service
         this._userService.user$
             .pipe((takeUntil(this._unsubscribeAll)))
@@ -70,10 +59,19 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
                 this.user = user;
             });
 
+        // Subscribe to navigation data
+        this._navigationService.navigation$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((navigation: Navigation) => {
+                const filterNavigation = navigation.default[0].children.filter(item => item.accessRole === this.user.role);
+                navigation.default[0].children = filterNavigation;
+                this.navigation = navigation;
+            });
+
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(({matchingAliases}) => {
+            .subscribe(({ matchingAliases }) => {
 
                 // Check if the screen is small
                 this.isScreenSmall = !matchingAliases.includes('md');
@@ -83,8 +81,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
@@ -99,13 +96,11 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
      *
      * @param name
      */
-    toggleNavigation(name: string): void
-    {
+    toggleNavigation(name: string): void {
         // Get the navigation
         const navigation = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>(name);
 
-        if ( navigation )
-        {
+        if (navigation) {
             // Toggle the opened status
             navigation.toggle();
         }

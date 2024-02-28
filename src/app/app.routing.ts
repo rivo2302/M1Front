@@ -73,12 +73,12 @@ export const appRoutes: Route[] = [
         children   : [
 
             // Dashboards
-            {path: 'dashboards', children: [
-                {path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule)},
-                {path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.module').then(m => m.AnalyticsModule)},
-                {path: 'rendez-vous', loadChildren: () => import('app/modules/admin/dashboards/finance/finance.module').then(m => m.FinanceModule)},
-                {path: 'gestion-employe', loadChildren: () => import('app/modules/admin/dashboards/crypto/crypto.module').then(m => m.CryptoModule)},
-            ]},
+            // {path: 'dashboards', children: [
+            //     {path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule)},
+            //     {path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.module').then(m => m.AnalyticsModule)},
+            //     {path: 'rendez-vous', loadChildren: () => import('app/modules/admin/dashboards/finance/finance.module').then(m => m.FinanceModule)},
+            //     {path: 'gestion-employe', loadChildren: () => import('app/modules/admin/dashboards/crypto/crypto.module').then(m => m.CryptoModule)},
+            // ]},
 
             // Client
             {path: 'client', children: [
@@ -89,6 +89,7 @@ export const appRoutes: Route[] = [
             {path: 'employee', children: [
                 {path: 'profil', loadChildren: () => import('app/modules/admin/pages/profile/profile.module').then(m => m.ProfileModule)},
                 {path: 'calendrier', loadChildren: () => import('app/modules/admin/apps/calendar/calendar.module').then(m => m.CalendarModule)},
+                {path: 'taches', loadChildren: () => import('app/modules/admin/apps/scrumboard/scrumboard.module').then(m => m.ScrumboardModule)},
             ]},
 
             // Manager

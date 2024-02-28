@@ -23,6 +23,9 @@ import { CalendarRecurrenceComponent } from 'app/modules/admin/apps/calendar/rec
 import { CalendarService } from 'app/modules/admin/apps/calendar/calendar.service';
 import { Calendar, CalendarDrawerMode, CalendarEvent, CalendarEventEditMode, CalendarEventPanelMode, CalendarSettings } from 'app/modules/admin/apps/calendar/calendar.types';
 import { FinanceService } from '../../dashboards/finance/finance.service';
+import { Router } from '@angular/router';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
 
 @Component({
     selector: 'calendar',
@@ -57,6 +60,13 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
         Finished: '09887870-f85a-40eb-8171-1b13d7a7f529',
     };
 
+    redirectURL = {
+        Client: "/client/rendez-vous",
+        Employee: "/employee/calendrier",
+        Manager: "/manager/dashboard"
+    };
+    user: User;
+
     private _eventPanelOverlayRef: OverlayRef;
     private _fullCalendarApi: FullCalendar;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -74,6 +84,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _viewContainerRef: ViewContainerRef,
         private _financeService: FinanceService,
+        private _router: Router,
+        private _userService: UserService
     ) {
     }
 
@@ -123,6 +135,16 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
             recurrence: [null],
             range: [{}]
         });
+
+        // Subscribe to the user service
+        this._userService.user$
+            .pipe((takeUntil(this._unsubscribeAll)))
+            .subscribe((user: User) => {
+                this.user = user;
+                if (!this.checkRole()) {
+                    this._router.navigate([this.redirectURL[this.user.role]]);
+                }
+            });
 
         // Subscribe to 'range' field value changes
         this.eventForm.get('range').valueChanges.subscribe((value) => {
@@ -174,19 +196,6 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
-
-        // Get events
-        // this._calendarService.events$
-        //     .pipe(takeUntil(this._unsubscribeAll))
-        //     .subscribe((events) => {
-
-        //         // Clone the events to change the object reference so
-        //         // that the FullCalendar can trigger a re-render.
-        //         this.events = cloneDeep(events);
-
-        //         // Mark for check
-        //         this._changeDetectorRef.markForCheck();
-        //     });
 
         this.getRendezVousByEmployeId();
 
@@ -307,19 +316,23 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     };
 
+    checkRole() {
+        return this._router.url.split("/")[1].toLowerCase() === this.user.role.toLowerCase()
+    };
+
     transformDataRendezVous(data: any[]) {
         var events: any[] = [];
         data.forEach((d: any) => {
             events.push({
-                id         : d._id,
-                calendarId : this.rendevousStatus[d.status],
-                title      : `${d.client.firstName} ${d.client.lastName}`,
+                id: d._id,
+                calendarId: this.rendevousStatus[d.status],
+                title: `${d.client.firstName} ${d.client.lastName}`,
                 description: this.getRequestedServices(d.requestedServices),
-                start      : moment(d.startDate, "YYYY-MM-DD").toISOString(),
-                end        : moment(d.endDate, "YYYY-MM-DD").add(1, 'days').toISOString(),
-                duration   : null,
-                allDay     : true,
-                recurrence : null
+                start: moment(d.startDate, "YYYY-MM-DD").toISOString(),
+                end: moment(d.endDate, "YYYY-MM-DD").add(1, 'days').toISOString(),
+                duration: null,
+                allDay: true,
+                recurrence: null
             });
         });
         return events;

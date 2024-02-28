@@ -9,7 +9,6 @@ export interface User
     firstName: string,
     role: string,
     salary?: number,
-    commissionPercentage?: number,
     password: string,
     name?: string,
     status?: string

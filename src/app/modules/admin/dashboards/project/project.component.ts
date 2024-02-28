@@ -36,6 +36,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
         message: ''
     };
     showAlert: boolean = false;
+    redirectURL = {
+        Client: "/client/rendez-vous",
+        Employee: "/employee/calendrier",
+        Manager: "/manager/dashboard"
+    }
 
     /**
      * Constructor
@@ -62,6 +67,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
             .pipe((takeUntil(this._unsubscribeAll)))
             .subscribe((user: User) => {
                 this.user = user;
+                if (!this.checkRole()) {
+                    this._router.navigate([this.redirectURL[this.user.role]]);
+                }
             });
 
 
@@ -103,6 +111,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
+
+    checkRole() {
+        return this._router.url.split("/")[1].toLowerCase() === this.user.role.toLowerCase()
+    };
 
     getEmployes() {
         const queryParams = "?role=employee"

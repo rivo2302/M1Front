@@ -9,6 +9,7 @@ import { UserService } from 'app/core/user/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FuseAlertType } from '@fuse/components/alert';
 import moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'finance',
@@ -35,6 +36,12 @@ export class FinanceComponent implements OnInit, OnDestroy {
     showAlert: boolean = false;
     loadingData: boolean = false;
 
+    redirectURL = {
+        Client: "/client/rendez-vous",
+        Employee: "/employee/calendrier",
+        Manager: "/manager/dashboard"
+    };
+
     /**
      * Constructor
      */
@@ -42,7 +49,8 @@ export class FinanceComponent implements OnInit, OnDestroy {
     constructor(
         private _financeService: FinanceService,
         private _userService: UserService,
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+        private _router: Router
     ) {
     }
 
@@ -70,6 +78,9 @@ export class FinanceComponent implements OnInit, OnDestroy {
             .pipe((takeUntil(this._unsubscribeAll)))
             .subscribe((user: User) => {
                 this.user = user;
+                if (!this.checkRole()) {
+                    this._router.navigate([this.redirectURL[this.user.role]]);
+                }
             });
 
         // Get the rendez-vous by client
@@ -100,6 +111,10 @@ export class FinanceComponent implements OnInit, OnDestroy {
     trackByFn(index: number, item: any): any {
         return item.id || index;
     }
+
+    checkRole() {
+        return this._router.url.split("/")[1].toLowerCase() === this.user.role.toLowerCase()
+    };
 
     getAllServices() {
         this._financeService.getAllServices().subscribe((res) => {
