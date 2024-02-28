@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,12 +7,13 @@ import { ProjectService } from 'app/modules/admin/dashboards/project/project.ser
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { FinanceService } from '../finance/finance.service';
+import { FormGroup } from '@angular/forms';
+import { FuseAlertType } from '@fuse/components/alert';
 
 @Component({
     selector: 'project',
     templateUrl: './project.component.html',
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    encapsulation: ViewEncapsulation.None
 })
 export class ProjectComponent implements OnInit, OnDestroy {
     chartGithubIssues: ApexOptions = {};
@@ -26,6 +27,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     user: User;
     employes: any;
+    services: any;
+    loadingData: boolean = false;
+    showDefault: boolean = true;
+    serviceForm: FormGroup;
+    alert: { type: FuseAlertType; message: string } = {
+        type: 'success',
+        message: ''
+    };
+    showAlert: boolean = false;
 
     /**
      * Constructor
@@ -68,6 +78,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
             });
 
         this.getEmployes();
+        this.getAllServices();
 
         // Attach SVG fill fixer to all ApexCharts
         window['Apex'] = {
@@ -102,10 +113,27 @@ export class ProjectComponent implements OnInit, OnDestroy {
         });
     }
 
+    getAllServices() {
+        this.loadingData = true;
+        this._financeService.getAllServices().subscribe((res) => {
+            this.services = {
+                columns: ["name", "price", "processingTime", "actions"],
+                rows: res
+            };
+        });
+        this.loadingData = false;
+    }
+
     navigateToProfile(userId: string): void {
         this._router.navigate(['employee/profil'], { queryParams: { userId: userId } });
     }
 
+    cancel(): void {
+        this.showDefault = true;
+        this.serviceForm.reset();
+        this.showAlert = false;
+        this.getAllServices();
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -353,105 +381,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
             yaxis: {
                 max: (max: number): number => parseInt((max + 10).toFixed(0), 10),
                 tickAmount: 7
-            }
-        };
-
-        // Weekly expenses
-        this.chartWeeklyExpenses = {
-            chart: {
-                animations: {
-                    enabled: false
-                },
-                fontFamily: 'inherit',
-                foreColor: 'inherit',
-                height: '100%',
-                type: 'line',
-                sparkline: {
-                    enabled: true
-                }
-            },
-            colors: ['#22D3EE'],
-            series: this.data.weeklyExpenses.series,
-            stroke: {
-                curve: 'smooth'
-            },
-            tooltip: {
-                theme: 'dark'
-            },
-            xaxis: {
-                type: 'category',
-                categories: this.data.weeklyExpenses.labels
-            },
-            yaxis: {
-                labels: {
-                    formatter: (val): string => `$${val}`
-                }
-            }
-        };
-
-        // Monthly expenses
-        this.chartMonthlyExpenses = {
-            chart: {
-                animations: {
-                    enabled: false
-                },
-                fontFamily: 'inherit',
-                foreColor: 'inherit',
-                height: '100%',
-                type: 'line',
-                sparkline: {
-                    enabled: true
-                }
-            },
-            colors: ['#4ADE80'],
-            series: this.data.monthlyExpenses.series,
-            stroke: {
-                curve: 'smooth'
-            },
-            tooltip: {
-                theme: 'dark'
-            },
-            xaxis: {
-                type: 'category',
-                categories: this.data.monthlyExpenses.labels
-            },
-            yaxis: {
-                labels: {
-                    formatter: (val): string => `$${val}`
-                }
-            }
-        };
-
-        // Yearly expenses
-        this.chartYearlyExpenses = {
-            chart: {
-                animations: {
-                    enabled: false
-                },
-                fontFamily: 'inherit',
-                foreColor: 'inherit',
-                height: '100%',
-                type: 'line',
-                sparkline: {
-                    enabled: true
-                }
-            },
-            colors: ['#FB7185'],
-            series: this.data.yearlyExpenses.series,
-            stroke: {
-                curve: 'smooth'
-            },
-            tooltip: {
-                theme: 'dark'
-            },
-            xaxis: {
-                type: 'category',
-                categories: this.data.yearlyExpenses.labels
-            },
-            yaxis: {
-                labels: {
-                    formatter: (val): string => `$${val}`
-                }
             }
         };
     }

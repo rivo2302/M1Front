@@ -17,13 +17,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 link : '/manager/dashboard'
             },
             {
-                id   : 'dashboards.analytics',
-                title: 'Analytics',
-                type : 'basic',
-                icon : 'heroicons_outline:chart-pie',
-                link : '/dashboards/analytics'
-            },
-            {
                 id   : 'dashboards.finance',
                 title: 'Rendez-vous',
                 type : 'basic',

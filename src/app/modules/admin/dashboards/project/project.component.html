@@ -324,303 +324,152 @@
                 <!-- Budget -->
                 <mat-tab label="Services">
                     <ng-template matTabContent>
-                        <div class="grid grid-cols-1 sm:grid-cols-6 gap-6 w-full min-w-0">
-                            <!-- Budget distribution -->
-                            <div class="sm:col-span-3 lg:col-span-4 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                                <div class="text-lg font-medium tracking-tight leading-6 truncate">Budget Distribution</div>
-                                <div class="flex flex-col flex-auto">
-                                    <apx-chart
-                                        class="flex-auto w-full h-80"
-                                        [chart]="chartBudgetDistribution.chart"
-                                        [colors]="chartBudgetDistribution.colors"
-                                        [dataLabels]="chartBudgetDistribution.dataLabels"
-                                        [markers]="chartBudgetDistribution.markers"
-                                        [plotOptions]="chartBudgetDistribution.plotOptions"
-                                        [series]="chartBudgetDistribution.series"
-                                        [stroke]="chartBudgetDistribution.stroke"
-                                        [tooltip]="chartBudgetDistribution.tooltip"
-                                        [xaxis]="chartBudgetDistribution.xaxis"
-                                        [yaxis]="chartBudgetDistribution.yaxis"></apx-chart>
+                        <!-- Title and action buttons -->
+                        <div class="flex items-center justify-between w-full">
+                            <div>
+                                <h2 class="text-3xl font-semibold tracking-tight leading-8">Services</h2>
+                                <div class="font-medium tracking-tight text-secondary">Gestion des services</div>
+                            </div>
+                            <div class="flex items-center ml-6">
+                                <button
+                                    class="hidden sm:inline-flex ml-3"
+                                    mat-flat-button
+                                    [color]="'primary'"
+                                    *ngIf="showDefault"
+                                    (click)="showDefault = false"
+                                    >
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        [svgIcon]="'heroicons_solid:plus'">
+                                        </mat-icon>
+                                    <span class="ml-2">Créer un service</span>
+                                </button>
+
+                                <button class="hidden sm:inline-flex ml-3" mat-flat-button (click)="cancel()" *ngIf="!showDefault">
+                                    Voir les services
+                                </button>
+
+                                <!-- Actions menu (visible on xs) -->
+                                <div class="sm:hidden">
+                                    <button
+                                        [matMenuTriggerFor]="actionsMenu"
+                                        mat-icon-button>
+                                        <mat-icon [svgIcon]="'heroicons_outline:dots-vertical'"></mat-icon>
+                                    </button>
+                                    <mat-menu #actionsMenu="matMenu">
+                                        <button mat-menu-item *ngIf="showDefault" (click)="showDefault = false">Créer un service</button>
+                                        <button mat-menu-item *ngIf="!showDefault" (click)="cancel()">Voir les services</button>
+                                    </mat-menu>
                                 </div>
                             </div>
-                            <!-- Expense -->
-                            <div class="sm:col-span-3 lg:col-span-2 grid grid-cols-1 gap-y-6">
-                                <!-- Weekly expenses -->
-                                <div class="sm:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                                    <div class="flex items-start justify-between">
-                                        <div class="text-lg font-medium tracking-tight leading-6 truncate">Weekly Expenses</div>
-                                        <div class="ml-2 -mt-2 -mr-3">
-                                            <button
-                                                mat-icon-button
-                                                [matMenuTriggerFor]="weeklyExpensesMenu">
-                                                <mat-icon
-                                                    class="icon-size-5"
-                                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-                                            </button>
-                                            <mat-menu #weeklyExpensesMenu="matMenu">
-                                                <button mat-menu-item>This week</button>
-                                                <button mat-menu-item>Last week</button>
-                                                <button mat-menu-item>2 weeks ago</button>
-                                            </mat-menu>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center mt-1">
-                                        <div class="flex flex-col">
-                                            <div class="text-3xl font-semibold tracking-tight leading-tight">
-                                                {{data.weeklyExpenses.amount | currency:'USD'}}
-                                            </div>
-                                            <div class="flex items-center">
-                                                <mat-icon
-                                                    class="mr-1 icon-size-5 text-green-500"
-                                                    [svgIcon]="'heroicons_solid:trending-down'"></mat-icon>
-                                                <div class="font-medium text-sm text-secondary leading-none whitespace-nowrap">
-                                                    <span class="text-green-500">2%</span>
-                                                    below projected
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col flex-auto ml-8">
-                                            <apx-chart
-                                                class="flex-auto w-full h-16"
-                                                [chart]="chartWeeklyExpenses.chart"
-                                                [colors]="chartWeeklyExpenses.colors"
-                                                [series]="chartWeeklyExpenses.series"
-                                                [stroke]="chartWeeklyExpenses.stroke"
-                                                [tooltip]="chartWeeklyExpenses.tooltip"
-                                                [xaxis]="chartWeeklyExpenses.xaxis"
-                                                [yaxis]="chartWeeklyExpenses.yaxis"></apx-chart>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Monthly expenses -->
-                                <div class="sm:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                                    <div class="flex items-start justify-between">
-                                        <div class="text-lg font-medium tracking-tight leading-6 truncate">Monthly Expenses</div>
-                                        <div class="ml-2 -mt-2 -mr-3">
-                                            <button
-                                                mat-icon-button
-                                                [matMenuTriggerFor]="monthlyExpensesMenu">
-                                                <mat-icon
-                                                    class="icon-size-5"
-                                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-                                            </button>
-                                            <mat-menu #monthlyExpensesMenu="matMenu">
-                                                <button mat-menu-item>This week</button>
-                                                <button mat-menu-item>Last week</button>
-                                                <button mat-menu-item>2 weeks ago</button>
-                                            </mat-menu>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center mt-1">
-                                        <div class="flex flex-col">
-                                            <div class="text-3xl font-semibold tracking-tight leading-tight">
-                                                {{data.monthlyExpenses.amount | currency:'USD'}}
-                                            </div>
-                                            <div class="flex items-center">
-                                                <mat-icon
-                                                    class="mr-1 icon-size-5 text-red-500"
-                                                    [svgIcon]="'heroicons_solid:trending-up'"></mat-icon>
-                                                <div class="font-medium text-sm text-secondary leading-none whitespace-nowrap">
-                                                    <span class="text-red-500">4%</span>
-                                                    above projected
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col flex-auto ml-8">
-                                            <apx-chart
-                                                class="flex-auto w-full h-16"
-                                                [chart]="chartMonthlyExpenses.chart"
-                                                [colors]="chartMonthlyExpenses.colors"
-                                                [series]="chartMonthlyExpenses.series"
-                                                [stroke]="chartMonthlyExpenses.stroke"
-                                                [tooltip]="chartMonthlyExpenses.tooltip"
-                                                [xaxis]="chartMonthlyExpenses.xaxis"
-                                                [yaxis]="chartMonthlyExpenses.yaxis"></apx-chart>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Yearly expenses -->
-                                <div class="sm:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                                    <div class="flex items-start justify-between">
-                                        <div class="text-lg font-medium tracking-tight leading-6 truncate">Yearly Expenses</div>
-                                        <div class="ml-2 -mt-2 -mr-3">
-                                            <button
-                                                mat-icon-button
-                                                [matMenuTriggerFor]="yearlyExpensesMenu">
-                                                <mat-icon
-                                                    class="icon-size-5"
-                                                    [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-                                            </button>
-                                            <mat-menu #yearlyExpensesMenu="matMenu">
-                                                <button mat-menu-item>This week</button>
-                                                <button mat-menu-item>Last week</button>
-                                                <button mat-menu-item>2 weeks ago</button>
-                                            </mat-menu>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center mt-1">
-                                        <div class="flex flex-col">
-                                            <div class="text-3xl font-semibold tracking-tight leading-tight">
-                                                {{data.yearlyExpenses.amount | currency:'USD'}}
-                                            </div>
-                                            <div class="flex items-center">
-                                                <mat-icon
-                                                    class="mr-1 icon-size-5 text-red-500"
-                                                    [svgIcon]="'heroicons_solid:trending-up'"></mat-icon>
-                                                <div class="font-medium text-sm text-secondary leading-none whitespace-nowrap">
-                                                    <span class="text-red-500">3%</span>
-                                                    above projected
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col flex-auto ml-8">
-                                            <apx-chart
-                                                class="flex-auto w-full h-16"
-                                                [chart]="chartYearlyExpenses.chart"
-                                                [colors]="chartYearlyExpenses.colors"
-                                                [series]="chartYearlyExpenses.series"
-                                                [stroke]="chartYearlyExpenses.stroke"
-                                                [tooltip]="chartYearlyExpenses.tooltip"
-                                                [xaxis]="chartYearlyExpenses.xaxis"
-                                                [yaxis]="chartYearlyExpenses.yaxis"></apx-chart>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Budget details -->
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-6 gap-6 w-full min-w-0 mt-8">
+                            <!-- Liste des services -->
                             <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                                <div class="text-lg font-medium tracking-tight leading-6 truncate">Budget Details</div>
+                                <div class="text-lg font-medium tracking-tight leading-6 truncate">Liste des services</div>
+                                <div class="text-secondary font-medium">{{services?.rows?.length}} services</div>
                                 <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                                    <div class="flex flex-col items-center justify-center mb-10" *ngIf="loadingData">
+                                        <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'">
+                                        </mat-progress-spinner>
+                                    </div>
+                                    <div class="flex flex-col items-center justify-center mb-10" *ngIf="!loadingData && services?.rows?.length === 0">
+                                        <mat-icon [svgIcon]="'heroicons_outline:information-circle'"></mat-icon>
+                                        <h2 class="text-secondary text-3xl"><strong>Aucun service trouvé</strong></h2>
+                                    </div>
                                     <table
                                         class="min-w-240 overflow-y-visible"
                                         mat-table
-                                        [dataSource]="data.budgetDetails.rows">
+                                        [dataSource]="services.rows">
 
-                                        <!-- Type -->
-                                        <ng-container
-                                            matColumnDef="type"
-                                            sticky>
+                                        <!-- Nom -->
+                                        <ng-container matColumnDef="name">
                                             <th
                                                 mat-header-cell
                                                 *matHeaderCellDef>
-                                                Type
+                                                Nom du service
                                             </th>
                                             <td
                                                 mat-cell
-                                                *matCellDef="let budget">
-                                                <span class="flex items-center">
-                                                    <span
-                                                        class="w-2 h-2 rounded-full"
-                                                        [ngClass]="{'bg-blue-500': budget.id === 1,
-                                                                    'bg-red-500': budget.id === 2,
-                                                                    'bg-green-500': budget.id === 3,
-                                                                    'bg-amber-500': budget.id === 4,
-                                                                    'bg-indigo-500': budget.id === 5}"></span>
-                                                    <span class="ml-3 leading-4">{{budget.type}}</span>
-                                                </span>
-                                            </td>
-                                        </ng-container>
-
-                                        <!-- Total -->
-                                        <ng-container matColumnDef="total">
-                                            <th
-                                                mat-header-cell
-                                                *matHeaderCellDef>
-                                                Total Budget
-                                            </th>
-                                            <td
-                                                mat-cell
-                                                *matCellDef="let budget">
+                                                *matCellDef="let s">
                                                 <span class="font-medium text-right">
-                                                    {{budget.total | currency:'USD'}}
+                                                    {{s.name}}
                                                 </span>
                                             </td>
                                         </ng-container>
 
-                                        <!-- Expenses amount -->
-                                        <ng-container matColumnDef="expensesAmount">
+                                        <!-- Prix -->
+                                        <ng-container matColumnDef="price">
                                             <th
                                                 mat-header-cell
                                                 *matHeaderCellDef>
-                                                Expenses (USD)
+                                                Prix
                                             </th>
                                             <td
                                                 mat-cell
-                                                *matCellDef="let budget">
-                                                {{budget.expensesAmount | currency:'USD'}}
+                                                *matCellDef="let s">
+                                                {{s.price}}
                                             </td>
                                         </ng-container>
 
-                                        <!-- Expenses percentage -->
-                                        <ng-container matColumnDef="expensesPercentage">
+                                        <!-- processingTime -->
+                                        <ng-container matColumnDef="processingTime">
                                             <th
                                                 mat-header-cell
                                                 *matHeaderCellDef>
-                                                Expenses (%)
+                                                Temps d'exécution
                                             </th>
                                             <td
                                                 mat-cell
-                                                *matCellDef="let budget">
-                                                {{budget.expensesPercentage}}%
-                                            </td>
-                                        </ng-container>
-
-                                        <!-- Remaining amount -->
-                                        <ng-container matColumnDef="remainingAmount">
-                                            <th
-                                                mat-header-cell
-                                                *matHeaderCellDef>
-                                                Remaining (USD)
-                                            </th>
-                                            <td
-                                                mat-cell
-                                                *matCellDef="let budget">
-                                                {{budget.remainingAmount | currency:'USD'}}
-                                            </td>
-                                        </ng-container>
-
-                                        <!-- Remaining percentage -->
-                                        <ng-container matColumnDef="remainingPercentage">
-                                            <th
-                                                mat-header-cell
-                                                *matHeaderCellDef>
-                                                Remaining (%)
-                                            </th>
-                                            <td
-                                                mat-cell
-                                                *matCellDef="let budget">
+                                                *matCellDef="let s">
                                                 <span class="flex items-center">
                                                     <span>
                                                         <!-- Low -->
                                                         <span
                                                             class="flex items-end w-1 h-4 bg-red-200 rounded overflow-hidden"
-                                                            *ngIf="budget.remainingPercentage < 30">
+                                                            *ngIf="s.processingTime < 3">
                                                             <span class="flex w-full h-1/3 bg-red-600"></span>
                                                         </span>
                                                         <!-- Medium -->
                                                         <span
                                                             class="flex items-end w-1 h-4 bg-orange-200 rounded overflow-hidden"
-                                                            *ngIf="budget.remainingPercentage >= 30 && budget.remainingPercentage < 80">
+                                                            *ngIf="s.processingTime >= 3 && s.processingTime < 5">
                                                             <span class="flex w-full h-2/4 bg-orange-400"></span>
                                                         </span>
                                                         <!-- High -->
                                                         <span
                                                             class="flex items-end w-1 h-4 bg-green-100 rounded overflow-hidden"
-                                                            *ngIf="budget.remainingPercentage >= 80">
+                                                            *ngIf="s.processingTime >= 5">
                                                             <span class="flex w-full h-full bg-green-400"></span>
                                                         </span>
                                                     </span>
-                                                    <span class="ml-3 leading-4">{{budget.remainingPercentage}}%</span>
+                                                    <span class="ml-3 leading-4">{{s.processingTime}} heures</span>
                                                 </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Action column -->
+                                        <ng-container matColumnDef="actions">
+                                            <th mat-header-cell *matHeaderCellDef class="flex flex-row justify-end">
+                                                Actions
+                                            </th>
+                                            <td mat-cell *matCellDef="let s" class="flex flex-row justify-end">
+                                                <button mat-icon-button>
+                                                    <mat-icon>edit</mat-icon>
+                                                </button>
+                                                <button mat-icon-button>
+                                                    <mat-icon class="text-red-500">delete</mat-icon>
+                                                </button>
                                             </td>
                                         </ng-container>
 
                                         <tr
                                             mat-header-row
-                                            *matHeaderRowDef="data.budgetDetails.columns"></tr>
+                                            *matHeaderRowDef="services.columns"></tr>
                                         <tr
                                             mat-row
-                                            *matRowDef="let row; columns: data.budgetDetails.columns;"></tr>
+                                            *matRowDef="let row; columns: services.columns;"></tr>
                                     </table>
                                 </div>
                             </div>
