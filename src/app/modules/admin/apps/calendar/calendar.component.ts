@@ -302,8 +302,6 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     getRendezVousByEmployeId(): void {
         const queryParams = `?employee=${localStorage.getItem("userId")}`
         this._financeService.getRendezVous(queryParams).pipe(finalize(() => { })).subscribe((data) => {
-            // const e = this.transformDataRendezVous(data);
-            // console.log(e);
             this.events = this.transformDataRendezVous(data);
             this._changeDetectorRef.markForCheck();
         });

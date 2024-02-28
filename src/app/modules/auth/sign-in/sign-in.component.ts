@@ -65,7 +65,7 @@ export class AuthSignInComponent implements OnInit {
             const redirectURL = {
                 Client: "/client/rendez-vous",
                 Employee: "/employee/calendrier",
-                Manager: "/manager/to-be-found"
+                Manager: "/manager/dashboard"
             }
             this._router.navigate([redirectURL[res.user.role]]);
         }, () => {

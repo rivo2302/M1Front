@@ -11,10 +11,10 @@ export const defaultNavigation: FuseNavigationItem[] = [
         children: [
             {
                 id   : 'dashboards.project',
-                title: 'Project',
+                title: 'Gestion et statistiques',
                 type : 'basic',
-                icon : 'heroicons_outline:clipboard-check',
-                link : '/dashboards/project'
+                icon : 'heroicons_outline:chart-bar',
+                link : '/manager/dashboard'
             },
             {
                 id   : 'dashboards.analytics',

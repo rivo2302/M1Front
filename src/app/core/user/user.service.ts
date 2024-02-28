@@ -8,8 +8,7 @@ import { environment } from 'environments/environment';
 @Injectable({
     providedIn: 'root'
 })
-export class UserService
-{
+export class UserService {
     private _user: ReplaySubject<User> = new ReplaySubject<User>(1);
     private _baseUrl: string = environment.apiUrl;
 
@@ -19,8 +18,7 @@ export class UserService
      */
     constructor(
         private _httpClient: HttpClient,
-    )
-    {
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -32,15 +30,13 @@ export class UserService
      *
      * @param value
      */
-    set user(value: User)
-    {
+    set user(value: User) {
         // Store the value
         this._user.next(value);
 
     }
 
-    get user$(): Observable<User>
-    {
+    get user$(): Observable<User> {
         return this._user.asObservable();
     }
 
@@ -51,8 +47,7 @@ export class UserService
     /**
      * Get the current logged in user data
      */
-    get(): Observable<User>
-    {
+    get(): Observable<User> {
         return this._httpClient.get<User>(`${this._baseUrl}/user/${localStorage.getItem("userId")}`).pipe(
             tap((user) => {
                 this._user.next(user);
@@ -65,17 +60,19 @@ export class UserService
      *
      * @param user
      */
-    update(user: User): Observable<any>
-    {
-        return this._httpClient.patch<User>('api/common/user', {user}).pipe(
+    update(user: User): Observable<any> {
+        return this._httpClient.patch<User>('api/common/user', { user }).pipe(
             map((response) => {
                 this._user.next(response);
             })
         );
     }
 
-    updateProfile(data: any): Observable<any> {
-        console.log(data);
-        return this._httpClient.put(`${this._baseUrl}/user/${localStorage.getItem("userId")}`, data);
+    updateProfile(id: string, data: any): Observable<any> {
+        return this._httpClient.put(`${this._baseUrl}/user/${id}`, data);
+    }
+
+    async getOneUSer(userId: string) {
+        return await this._httpClient.get<User>(`${this._baseUrl}/user/${userId}`).toPromise()
     }
 }

@@ -13,14 +13,8 @@
                     </div>
                     <div class="flex flex-col min-w-0 ml-4">
                         <ng-container *transloco="let t">
-                            <div class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">{{t('welcome-back')}}, {{user.firstName}}!</div>
+                            <div class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">Bienvenu, {{user.firstName}}!</div>
                         </ng-container>
-                        <div class="flex items-center">
-                            <mat-icon
-                                class="icon-size-5"
-                                [svgIcon]="'heroicons_solid:bell'"></mat-icon>
-                            <div class="ml-1.5 leading-6 truncate text-secondary">You have 15 tasks</div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -36,7 +30,7 @@
                 [animationDuration]="'0'">
 
                 <!-- Home -->
-                <mat-tab label="Home">
+                <mat-tab label="Statistiques">
                     <ng-template matTabContent>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
                             <!-- Summary -->
@@ -328,7 +322,7 @@
                 </mat-tab>
 
                 <!-- Budget -->
-                <mat-tab label="Budget">
+                <mat-tab label="Services">
                     <ng-template matTabContent>
                         <div class="grid grid-cols-1 sm:grid-cols-6 gap-6 w-full min-w-0">
                             <!-- Budget distribution -->
@@ -635,38 +629,35 @@
                 </mat-tab>
 
                 <!-- Team -->
-                <mat-tab label="Team">
+                <mat-tab label="Personnels">
                     <ng-template matTabContent>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0">
-                            <ng-container *ngFor="let member of data.teamMembers">
+                            <ng-container *ngFor="let emp of employes">
                                 <div class="flex flex-col flex-auto items-center bg-card shadow rounded-2xl overflow-hidden">
                                     <!-- Avatar & Info -->
                                     <div class="flex flex-col flex-auto w-full p-8 text-center">
                                         <div class="w-32 h-32 mx-auto rounded-full overflow-hidden">
-                                            <img
-                                                class="w-full h-full object-cover"
-                                                [src]="member.avatar">
+                                            <img *ngIf="emp?.avatar" class="w-full h-full object-cover" [src]="emp?.avatar">
+                                            <mat-icon class="w-full h-full object-cover" *ngIf="!emp.avatar" [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
                                         </div>
-                                        <div class="mt-6 font-medium">{{member.name}}</div>
-                                        <div class="text-secondary">{{member.title}}</div>
+                                        <div class="mt-6 font-medium">{{emp.lastName}} {{emp.firstName}}</div>
+                                        <div class="text-secondary">{{emp.email}}</div>
                                     </div>
-                                    <!-- Email & Phone -->
+                                    <!-- Email & edit -->
                                     <div class="flex items-center w-full border-t divide-x">
                                         <a
                                             class="flex flex-auto items-center justify-center py-4 hover:bg-hover"
-                                            [href]="'mailto:' + member.email">
+                                            [href]="'mailto:' + emp.email">
                                             <mat-icon
                                                 class="icon-size-5 text-hint"
                                                 [svgIcon]="'heroicons_solid:mail'"></mat-icon>
                                             <span class="ml-2">Email</span>
                                         </a>
-                                        <a
-                                            class="flex flex-auto items-center justify-center py-4 hover:bg-hover"
-                                            [href]="'tel:' + member.phone">
+                                        <a style="cursor: pointer" (click)="navigateToProfile(emp._id)" class="flex flex-auto items-center justify-center py-4 hover:bg-hover">
                                             <mat-icon
                                                 class="icon-size-5 text-hint"
-                                                [svgIcon]="'heroicons_solid:phone'"></mat-icon>
-                                            <span class="ml-2">Call</span>
+                                                [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
+                                            <span class="ml-2">Modifier</span>
                                         </a>
                                     </div>
                                 </div>

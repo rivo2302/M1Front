@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
 import { map, switchMap, take, tap } from 'rxjs/operators';
+import { environment } from 'environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -10,6 +11,7 @@ import { map, switchMap, take, tap } from 'rxjs/operators';
 export class NotificationsService
 {
     private _notifications: ReplaySubject<Notification[]> = new ReplaySubject<Notification[]>(1);
+    public _baseUrl: string = environment.apiUrl;
 
     /**
      * Constructor
@@ -151,5 +153,9 @@ export class NotificationsService
                 })
             ))
         );
+    }
+
+    getNotifications(queryParams: string): Observable<any> {
+        return this._httpClient.get(`${this._baseUrl}/notification${queryParams}`);
     }
 }
