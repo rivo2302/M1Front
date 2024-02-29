@@ -1,5 +1,4 @@
 <div class="flex flex-col flex-auto min-w-0">
-
     <!-- Header -->
     <div class="bg-card">
         <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
@@ -35,7 +34,7 @@
                 <!-- Home -->
                 <mat-tab label="Statistiques des 30 derniers jours">
                     <ng-template matTabContent>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0" *ngIf="stats">
                             <!-- Summary -->
                             <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
                                 <div class="flex items-start justify-between">
@@ -55,13 +54,13 @@
                                         </mat-menu>
                                     </div> -->
                                 </div>
-                                <div class="flex flex-col items-center mt-2">
+                                <div class="flex flex-col items-center mt-6">
                                     <div class="text-4xl sm:text-5xl font-bold tracking-tight leading-none text-blue-500">{{formatNumberWithSpaceSeparator(stats?.revenue.profit)}}</div>
                                     <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                                         <div class="text-md font-medium truncate">Dépense:</div>
                                         <div class="ml-1.5 text-lg font-semibold">{{stats?.revenue.expenses}}</div>
                                     </div>
-                                    <div class="flex items-baseline justify-center w-full mt-3 text-secondary">
+                                    <div class="flex items-baseline justify-center w-full mt-1 text-secondary">
                                         <div class="text-md font-medium truncate">Revenu:</div>
                                         <div class="ml-1.5 text-lg font-semibold">{{stats?.revenue.income}}</div>
                                     </div>
@@ -86,17 +85,17 @@
                                         </mat-menu>
                                     </div> -->
                                 </div>
-                                <div class="flex flex-col items-center mt-2">
+                                <div class="flex flex-col items-center mt-6">
                                     <div class="text-4xl sm:text-5xl font-bold tracking-tight leading-none text-green-500">{{stats?.appointments.total}}</div>
                                     <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                                         <div class="text-md font-medium truncate">Placé:</div>
                                         <div class="ml-1.5 text-lg font-semibold">{{stats?.appointments.ready}}</div>
                                     </div>
-                                    <div class="flex items-baseline justify-center w-full mt-3 text-secondary">
+                                    <div class="flex items-baseline justify-center w-full mt-1 text-secondary">
                                         <div class="text-md font-medium truncate">En cours:</div>
                                         <div class="ml-1.5 text-lg font-semibold">{{stats?.appointments.inProgress}}</div>
                                     </div>
-                                    <div class="flex items-baseline justify-center w-full mt-3 text-secondary">
+                                    <div class="flex items-baseline justify-center w-full mt-1 text-secondary">
                                         <div class="text-md font-medium truncate">Effectué:</div>
                                         <div class="ml-1.5 text-lg font-semibold">{{stats?.appointments.finished}}</div>
                                     </div>
@@ -121,7 +120,7 @@
                                         </mat-menu>
                                     </div> -->
                                 </div>
-                                <div class="flex flex-col items-center mt-2">
+                                <div class="flex flex-col items-center mt-6">
                                     <div class="text-4xl sm:text-5xl font-bold tracking-tight leading-none text-amber-500">{{formatNumberWithSpaceSeparator(stats?.commission.amount)}}</div>
                                     <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                                         <div class="text-md font-medium truncate">Nombre:</div>
