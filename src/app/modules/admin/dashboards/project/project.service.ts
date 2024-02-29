@@ -54,4 +54,5 @@ export class ProjectService {
     deleteService(id: string): Observable<any> {
         return this._httpClient.delete(`${this._baseUrl}/service/${id}`);
     }
+
 }

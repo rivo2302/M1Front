@@ -572,8 +572,34 @@
                 <!-- Team -->
                 <mat-tab label="Personnels">
                     <ng-template matTabContent>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0">
-                            <ng-container *ngFor="let emp of employes">
+                        <!-- Main actions -->
+                        <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+                            <!-- Search -->
+                            <div class="flex-auto">
+                                <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        matPrefix
+                                        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                    <input
+                                        matInput
+                                        [formControl]="searchInputControl"
+                                        [autocomplete]="'off'"
+                                        [placeholder]="'Rechercher un employé'">
+                                </mat-form-field>
+                            </div>
+                            <!-- Add contact button -->
+                            <button
+                                class="ml-4"
+                                mat-flat-button
+                                [color]="'primary'"
+                                (click)="createContact()">
+                                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                                <span class="ml-2 mr-1">Ajouter</span>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0 mt-4">
+                            <ng-container *ngFor="let emp of filteredEmployes">
                                 <div class="flex flex-col flex-auto items-center bg-card shadow rounded-2xl overflow-hidden">
                                     <!-- Avatar & Info -->
                                     <div class="flex flex-col flex-auto w-full p-8 text-center">

@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { ApexOptions } from 'ng-apexcharts';
 import { ProjectService } from 'app/modules/admin/dashboards/project/project.service';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { FinanceService } from '../finance/finance.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FuseAlertType } from '@fuse/components/alert';
 import { FuseConfirmationService } from '@fuse/services/confirmation/confirmation.service';
 
@@ -44,6 +44,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     configForm: FormGroup;
     isEdit: boolean = false;
     service: any;
+    searchInputControl: FormControl = new FormControl();
+    filteredEmployes: any;
 
     /**
      * Constructor
@@ -119,6 +121,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 this._prepareChartData();
             });
 
+        // Subscribe to search input field value changes
+        this.searchInputControl.valueChanges
+            .pipe(
+                takeUntil(this._unsubscribeAll),
+                switchMap(query =>
+                    // Check if query is empty or null
+                    query ? this.searchEmployees(query) : of(this.employes)
+                )
+            )
+            .subscribe();
+
         this.getEmployes();
         this.getAllServices();
 
@@ -154,8 +167,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         const queryParams = "?role=employee"
         this._financeService.getUsers(queryParams).subscribe((res) => {
             this.employes = res;
-            console.log(this.employes);
-
+            this.filteredEmployes = [...this.employes]
         });
     }
 
@@ -246,6 +258,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
             processingTime: [service.processingTime, [Validators.required]],
             commissionPercentage: [service.commissionPercentage, [Validators.required]]
         });
+    }
+
+    searchEmployees(query: string) {
+        this.filteredEmployes = this.employes.filter((emp: any) => {
+            const fullName = `${emp.firstName} ${emp.lastName}`.toLowerCase();
+            const email = emp.email.toLowerCase();
+            return fullName.includes(query.toLowerCase()) || email.includes(query.toLowerCase());
+        });
+        return this.filteredEmployes;
     }
 
     /**
