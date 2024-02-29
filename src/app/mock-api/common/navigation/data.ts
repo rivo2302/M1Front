@@ -48,15 +48,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon : 'heroicons_outline:user-circle',
                 link : '/employee/profil',
                 accessRole: 'Employee'
-            },
-            {
-                id   : 'apps.contacts',
-                title: 'Contacts',
-                type : 'basic',
-                icon : 'heroicons_outline:user-group',
-                link : '/apps/contacts',
-                accessRole: 'Manager'
-            },
+            }
         ]
     }
 ];
