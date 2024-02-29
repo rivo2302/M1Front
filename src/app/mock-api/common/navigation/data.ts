@@ -11,7 +11,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         children: [
             {
                 id   : 'dashboards.project',
-                title: 'Gestion et statistiques',
+                title: 'Statistiques et gestion',
                 type : 'basic',
                 icon : 'heroicons_outline:chart-bar',
                 link : '/manager/dashboard',
@@ -48,14 +48,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon : 'heroicons_outline:user-circle',
                 link : '/employee/profil',
                 accessRole: 'Employee'
-            },
-            {
-                id   : 'user-interface.confirmation-dialog',
-                title: 'Confirmation Dialog',
-                type : 'basic',
-                icon : 'heroicons_outline:question-mark-circle',
-                link : '/ui/confirmation-dialog',
-                accessRole: 'Manager'
             },
             {
                 id   : 'apps.contacts',

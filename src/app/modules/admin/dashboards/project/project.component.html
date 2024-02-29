@@ -7,9 +7,12 @@
                 <!-- Avatar and name -->
                 <div class="flex flex-auto items-center min-w-0">
                     <div class="flex-0 w-16 h-16 rounded-full overflow-hidden">
-                        <img
+                        <img *ngIf="user.avatar" class="w-full h-full object-cover" [src]="user.avatar">
+                        <mat-icon
                             class="w-full h-full object-cover"
-                            src="assets/images/avatars/brian-hughes.jpg">
+                            *ngIf="!user.avatar"
+                            [svgIcon]="'heroicons_solid:user-circle'">
+                        </mat-icon>
                     </div>
                     <div class="flex flex-col min-w-0 ml-4">
                         <ng-container *transloco="let t">
@@ -321,7 +324,7 @@
                     </ng-template>
                 </mat-tab>
 
-                <!-- Budget -->
+                <!-- Services -->
                 <mat-tab label="Services">
                     <ng-template matTabContent>
                         <!-- Title and action buttons -->
@@ -575,7 +578,7 @@
                                     <!-- Avatar & Info -->
                                     <div class="flex flex-col flex-auto w-full p-8 text-center">
                                         <div class="w-32 h-32 mx-auto rounded-full overflow-hidden">
-                                            <img *ngIf="emp?.avatar" class="w-full h-full object-cover" [src]="emp?.avatar">
+                                            <img *ngIf="emp?.avatar" class="w-full h-full object-cover" [src]="emp.avatar">
                                             <mat-icon class="w-full h-full object-cover" *ngIf="!emp.avatar" [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
                                         </div>
                                         <div class="mt-6 font-medium">{{emp.lastName}} {{emp.firstName}}</div>

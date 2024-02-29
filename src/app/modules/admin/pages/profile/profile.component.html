@@ -16,10 +16,12 @@
 
             <!-- Avatar -->
             <div class="-mt-26 lg:-mt-22 rounded-full">
-                <img
-                    class="w-32 h-32 rounded-full ring-4 ring-bg-card"
-                    src="assets/images/avatars/male-04.jpg"
-                    alt="User avatar">
+                <img *ngIf="user.avatar" class="w-32 h-32 object-cover rounded-full ring-4 ring-bg-card" [src]="user.avatar">
+                <mat-icon
+                    class="w-20 h-20 object-cover rounded-full" style="margin-top: 93px;"
+                    *ngIf="!user.avatar"
+                    [svgIcon]="'heroicons_solid:user-circle'">
+                </mat-icon>
             </div>
 
             <!-- Details -->
