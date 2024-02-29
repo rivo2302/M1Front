@@ -50,4 +50,8 @@ export class ProjectService {
     updateService(id: string, data: any): Observable<any> {
         return this._httpClient.put(`${this._baseUrl}/service/${id}`, data);
     }
+
+    deleteService(id: string): Observable<any> {
+        return this._httpClient.delete(`${this._baseUrl}/service/${id}`);
+    }
 }

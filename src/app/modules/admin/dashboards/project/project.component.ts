@@ -9,6 +9,7 @@ import { User } from 'app/core/user/user.types';
 import { FinanceService } from '../finance/finance.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FuseAlertType } from '@fuse/components/alert';
+import { FuseConfirmationService } from '@fuse/services/confirmation/confirmation.service';
 
 @Component({
     selector: 'project',
@@ -41,7 +42,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         Manager: "/manager/dashboard"
     };
     configForm: FormGroup;
-    isEdit: boolean  = false;
+    isEdit: boolean = false;
     service: any;
 
     /**
@@ -53,6 +54,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         private _financeService: FinanceService,
         private _router: Router,
         private _formBuilder: FormBuilder,
+        private _fuseConfirmationService: FuseConfirmationService
     ) {
     }
 
@@ -69,6 +71,29 @@ export class ProjectComponent implements OnInit, OnDestroy {
             price: ["", [Validators.required]],
             processingTime: ["", [Validators.required]],
             commissionPercentage: ["", [Validators.required]]
+        });
+
+        // Build the config form
+        this.configForm = this._formBuilder.group({
+            title: 'Supprimer un service',
+            message: 'Voulez-vous vraiment supprimer ce service',
+            icon: this._formBuilder.group({
+                show: true,
+                name: 'heroicons_outline:exclamation',
+                color: 'warn'
+            }),
+            actions: this._formBuilder.group({
+                confirm: this._formBuilder.group({
+                    show: true,
+                    label: 'Supprimer',
+                    color: 'warn'
+                }),
+                cancel: this._formBuilder.group({
+                    show: true,
+                    label: 'Annuler'
+                })
+            }),
+            dismissible: true
         });
 
         // Subscribe to the user service
@@ -220,6 +245,25 @@ export class ProjectComponent implements OnInit, OnDestroy {
             price: [service.price, [Validators.required]],
             processingTime: [service.processingTime, [Validators.required]],
             commissionPercentage: [service.commissionPercentage, [Validators.required]]
+        });
+    }
+
+    /**
+     * Open confirmation dialog
+     */
+    openConfirmationDialog(service: any): void {
+        // Open the dialog and save the reference of it
+        const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+
+        // Subscribe to afterClosed from the dialog reference
+        dialogRef.afterClosed().subscribe((result) => {
+            console.log(result);
+            if (result === "confirmed") {
+                this._projectService.deleteService(service._id).subscribe((res: any) => {
+                }, () => {
+                });
+                this.getAllServices();
+            }
         });
     }
 

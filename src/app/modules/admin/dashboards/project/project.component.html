@@ -473,7 +473,7 @@
                                                 <button mat-icon-button (click)="showDefault = false; isEdit = true; setServiceForm(s)">
                                                     <mat-icon>edit</mat-icon>
                                                 </button>
-                                                <button mat-icon-button>
+                                                <button mat-icon-button (click)="openConfirmationDialog(s)">
                                                     <mat-icon class="text-red-500">delete</mat-icon>
                                                 </button>
                                             </td>

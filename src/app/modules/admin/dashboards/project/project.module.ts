@@ -24,6 +24,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FuseAlertModule } from '@fuse/components/alert';
+import { FuseHighlightModule } from '@fuse/components/highlight';
 
 @NgModule({
     declarations: [
@@ -52,7 +53,8 @@ import { FuseAlertModule } from '@fuse/components/alert';
         MatRadioModule,
         MatSelectModule,
         MatDatepickerModule,
-        FuseAlertModule
+        FuseAlertModule,
+        FuseHighlightModule
     ]
 })
 export class ProjectModule
