@@ -42,20 +42,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-        // Subscribe to notification changes
-        this._notificationsService.notifications$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((notifications: Notification[]) => {
-
-                // Load the notifications
-                this.notifications = [];
-
-                // Calculate the unread count
-                this._calculateUnreadCount();
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
         this.getNotificationsByUserId();
     }
 
@@ -210,7 +196,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         this._notificationsService.getNotifications(queryParams).pipe(finalize(() => { })).subscribe((notifications: any) => {
             // Load the notifications
             this.notifications = notifications?.notifications;
-            console.log(notifications?.notifications);
 
             // // Calculate the unread count
             this._calculateUnreadCount();

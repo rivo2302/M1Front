@@ -63,8 +63,12 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
         this._navigationService.navigation$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((navigation: Navigation) => {
-                const filterNavigation = navigation.default[0].children.filter(item => item.accessRole === this.user.role);
+                const filterNavigation = navigation.default[0].children.filter((item) => {
+                    console.log(item.accessRole, this.user.role);
+                    return item.accessRole === this.user.role;
+                });
                 navigation.default[0].children = filterNavigation;
+                console.log(navigation);
                 this.navigation = navigation;
             });
 

@@ -51,6 +51,8 @@ export class UserService {
         return this._httpClient.get<User>(`${this._baseUrl}/user/${localStorage.getItem("userId")}`).pipe(
             tap((user) => {
                 this._user.next(user);
+                console.log(user, "user logged in");
+
             })
         );
     }

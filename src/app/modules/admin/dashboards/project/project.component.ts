@@ -7,7 +7,7 @@ import { ProjectService } from 'app/modules/admin/dashboards/project/project.ser
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { FinanceService } from '../finance/finance.service';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FuseAlertType } from '@fuse/components/alert';
 
 @Component({
@@ -23,7 +23,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     chartMonthlyExpenses: ApexOptions = {};
     chartYearlyExpenses: ApexOptions = {};
     data: any;
-    selectedProject: string = 'ACME Corp. Backend App';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     user: User;
     employes: any;
@@ -40,7 +39,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
         Client: "/client/rendez-vous",
         Employee: "/employee/calendrier",
         Manager: "/manager/dashboard"
-    }
+    };
+    configForm: FormGroup;
+    isEdit: boolean  = false;
+    service: any;
 
     /**
      * Constructor
@@ -49,7 +51,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
         private _projectService: ProjectService,
         private _userService: UserService,
         private _financeService: FinanceService,
-        private _router: Router
+        private _router: Router,
+        private _formBuilder: FormBuilder,
     ) {
     }
 
@@ -61,6 +64,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
+        this.serviceForm = this._formBuilder.group({
+            name: ["", [Validators.required]],
+            price: ["", [Validators.required]],
+            processingTime: ["", [Validators.required]],
+            commissionPercentage: ["", [Validators.required]]
+        });
 
         // Subscribe to the user service
         this._userService.user$
@@ -129,7 +138,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.loadingData = true;
         this._financeService.getAllServices().subscribe((res) => {
             this.services = {
-                columns: ["name", "price", "processingTime", "actions"],
+                columns: ["name", "price", "processingTime", "commissionPercentage", "actions"],
                 rows: res
             };
         });
@@ -144,8 +153,76 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.showDefault = true;
         this.serviceForm.reset();
         this.showAlert = false;
+        this.isEdit = false;
         this.getAllServices();
     }
+
+    createService(): void {
+        if (this.serviceForm.invalid) {
+            return;
+        }
+
+        this.serviceForm.disable();
+        this.showAlert = false;
+
+        this._projectService.createService(this.serviceForm.value).subscribe(() => {
+            window.scroll(0, 0);
+            this.alert = {
+                type: 'success',
+                message: 'Service créé avec succès'
+            };
+            this.showAlert = true;
+            this.serviceForm.enable();
+            this.serviceForm.reset();
+        }, () => {
+            window.scroll(0, 0);
+            this.serviceForm.enable();
+            this.alert = {
+                type: 'error',
+                message: 'Impossible de créer le service'
+            };
+            this.showAlert = true;
+        });
+    }
+
+    updateService(): void {
+        if (this.serviceForm.invalid) {
+            return;
+        }
+
+        this.serviceForm.disable();
+        this.showAlert = false;
+
+        this._projectService.updateService(this.service._id, this.serviceForm.value).subscribe(() => {
+            window.scroll(0, 0);
+            this.alert = {
+                type: 'success',
+                message: 'Service mis à jour avec succès'
+            };
+            this.showAlert = true;
+            this.serviceForm.enable();
+            this.serviceForm.reset();
+        }, () => {
+            window.scroll(0, 0);
+            this.serviceForm.enable();
+            this.alert = {
+                type: 'error',
+                message: 'Impossible de mettre à jour le service'
+            };
+            this.showAlert = true;
+        });
+    }
+
+    setServiceForm(service: any) {
+        this.service = service;
+        this.serviceForm = this._formBuilder.group({
+            name: [service.name, [Validators.required]],
+            price: [service.price, [Validators.required]],
+            processingTime: [service.processingTime, [Validators.required]],
+            commissionPercentage: [service.commissionPercentage, [Validators.required]]
+        });
+    }
+
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------

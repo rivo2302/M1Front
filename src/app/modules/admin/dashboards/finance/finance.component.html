@@ -209,7 +209,7 @@
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                     <mat-error *ngIf="rendezForm.get('startDate').hasError('required')">
-                        Start date is required
+                        Le champ dete debut est requis
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field class="flex-auto">
@@ -220,7 +220,7 @@
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker>
                     <mat-error *ngIf="rendezForm.get('endDate').hasError('required')">
-                        End date is required
+                        Le champ dete fin est requis
                     </mat-error>
                 </mat-form-field>
             </div>
