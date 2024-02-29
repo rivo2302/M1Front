@@ -46,6 +46,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     service: any;
     searchInputControl: FormControl = new FormControl();
     filteredEmployes: any;
+    stats: any;
 
     /**
      * Constructor
@@ -132,6 +133,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
             )
             .subscribe();
 
+        this.getAllStats();
         this.getEmployes();
         this.getAllServices();
 
@@ -167,8 +169,37 @@ export class ProjectComponent implements OnInit, OnDestroy {
         const queryParams = "?role=employee"
         this._financeService.getUsers(queryParams).subscribe((res) => {
             this.employes = res;
-            this.filteredEmployes = [...this.employes]
+            this.filteredEmployes = [...this.employes];
         });
+    }
+
+    getAllStats() {
+        const { startDate, endDate } = this.getStartAndEndDate();
+        const queryParams = `?startDate=${startDate}&endDate=${endDate}`
+        this._projectService.getStats(queryParams).subscribe((res: any) => {
+            this.stats = res;
+        });
+    }
+
+    getStartAndEndDate() {
+        // Get the current date
+        const currentDate = new Date();
+
+        // Calculate the start date (today - 30 days)
+        const startDate = new Date();
+        startDate.setDate(currentDate.getDate() - 30);
+
+        // Format the start date as a string in 'YYYY-MM-DD' format
+        const formattedStartDate = startDate.toISOString().split('T')[0];
+
+        // Format the current date as a string in 'YYYY-MM-DD' format
+        const formattedEndDate = currentDate.toISOString().split('T')[0];
+
+        return { startDate: formattedStartDate, endDate: formattedEndDate }
+    }
+
+    formatNumberWithSpaceSeparator(number: number): string {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
     }
 
     getAllServices() {

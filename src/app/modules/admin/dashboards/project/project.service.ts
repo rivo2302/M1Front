@@ -55,4 +55,8 @@ export class ProjectService {
         return this._httpClient.delete(`${this._baseUrl}/service/${id}`);
     }
 
+    getStats(queryParams: string): Observable<any> {
+        return this._httpClient.get(`${this._baseUrl}/stat${queryParams}`);
+    }
+
 }
