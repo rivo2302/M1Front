@@ -48,7 +48,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     searchInputControl: FormControl = new FormControl();
     filteredEmployes: any;
     stats: any;
-    isLoading: boolean;
 
     /**
      * Constructor
@@ -176,7 +175,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
 
     getAllStats() {
-        this.isLoading = true;
         const { startDate, endDate } = this.getStartAndEndDate();
         const queryParams = `?startDate=${startDate}&endDate=${endDate}`
         this._projectService.getStats(queryParams).subscribe((res: any) => {
